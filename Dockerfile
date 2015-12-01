@@ -4,8 +4,11 @@ FROM golang
 
 # install GRPC
 RUN echo "deb http://http.debian.net/debian jessie-backports main" >> /etc/apt/sources.list
-RUN apt-get update && apt-get -y upgrade && \
+RUN apt-get update && \
   apt-get -y install libgrpc-dev git vim --no-install-recommends && \
+# install security updates
+  grep security /etc/apt/sources.list > /tmp/security.list && \
+  apt-get -y upgrade -o Dir::Etc::Sourcelist=/tmp/security.list && \
 # cleanup
   apt-get autoremove -y && \
   apt-get autoclean && \
